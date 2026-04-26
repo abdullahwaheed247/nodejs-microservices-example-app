@@ -1,0 +1,46 @@
+name: CI - Build and Push Docker Images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [web, users, db-fixture]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v4
+        with:
+          context: ./${{ matrix.service }}
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+
+      - name: Update k8s manifest with new image tag
+        run: |
+          FILE="k8s/${{ matrix.service }}-deployment.yaml"
+          if [ -f "$FILE" ]; then
+            sed -i "s|22i0765/${{ matrix.service }}:.*|22i0765/${{ matrix.service }}:${{ github.sha }}|g" "$FILE"
+          fi
+
+      - name: Commit updated manifests
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add k8s/
+          git diff --cached --quiet || git commit -m "ci: update ${{ matrix.service }} image to ${{ github.sha }}"
+          git push

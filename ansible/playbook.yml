@@ -1,0 +1,49 @@
+---
+- name: Configure EC2 and install microk8s
+  hosts: ec2
+  become: yes
+
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install snapd
+      apt:
+        name: snapd
+        state: present
+
+    - name: Install microk8s via snap
+      command: snap install microk8s --classic
+      args:
+        creates: /snap/bin/microk8s
+
+    - name: Add ubuntu user to microk8s group
+      user:
+        name: ubuntu
+        groups: microk8s
+        append: yes
+
+    - name: Fix .kube ownership
+      file:
+        path: /home/ubuntu/.kube
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        recurse: yes
+
+    - name: Wait for microk8s to be ready
+      command: microk8s status --wait-ready
+      # run as root this time, avoids group session issue
+
+    - name: Enable microk8s DNS addon
+      command: microk8s enable dns
+
+    - name: Enable microk8s registry addon
+      command: microk8s enable registry
+
+    - name: Create kubectl alias
+      lineinfile:
+        path: /home/ubuntu/.bashrc
+        line: 'alias kubectl="microk8s kubectl"'

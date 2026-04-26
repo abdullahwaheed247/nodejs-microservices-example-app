@@ -1,0 +1,11 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-fixture
+spec:
+  template:
+    spec:
+      containers:
+        - name: db-fixture
+          image: your_actual_username/db-fixture:latest
+      restartPolicy: OnFailure
