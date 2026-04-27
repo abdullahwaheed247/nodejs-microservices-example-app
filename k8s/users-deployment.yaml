@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: 22i0765/users:latest  # updated by CI
+          image: 22i0765/users:372ec1eeecfb7a6f458f50a06724aafa1dc29be0
           ports:
             - containerPort: 4001
 ---
