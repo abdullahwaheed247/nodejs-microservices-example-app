@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: 22i0765/web:990d08c6b4310645304203a18f248d4e6d092e2d
+          image: 22i0765/web:81b19021e9c94a0346425ef37ca520c020c15814
           ports:
             - containerPort: 4000
           env:
