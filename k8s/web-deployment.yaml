@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: your_actual_username/web:latest  # updated by CI
+          image: 22i0765/web:latest  # updated by CI
           ports:
             - containerPort: 4000
           env:

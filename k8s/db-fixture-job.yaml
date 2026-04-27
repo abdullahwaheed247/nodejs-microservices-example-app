@@ -7,5 +7,5 @@ spec:
     spec:
       containers:
         - name: db-fixture
-          image: your_actual_username/db-fixture:latest
+          image: 22i0765/db-fixture:latest
       restartPolicy: OnFailure
