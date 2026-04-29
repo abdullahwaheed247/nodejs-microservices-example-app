@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: 22i0765/web:latest
+          image: 22i0765/web:925106454f4c9c68ffc75b3c0287abe847499ab1
           ports:
             - containerPort: 80
           env:
