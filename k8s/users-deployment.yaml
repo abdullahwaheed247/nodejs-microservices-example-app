@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: 22i0765/users:latest
+          image: 22i0765/users:925106454f4c9c68ffc75b3c0287abe847499ab1
           ports:
             - containerPort: 80
           env:
