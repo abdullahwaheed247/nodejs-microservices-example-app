@@ -15,11 +15,11 @@ spec:
     spec:
       containers:
         - name: web
-          image: 22i0765/web:fa27b8d576725dbbf096f68ef610beec1215a9fe
+          image: 22i0765/web:latest
           ports:
-            - containerPort: 4000
+            - containerPort: 80
           env:
-            - name: USERS_SERVICE_URL
+            - name: SERVICE_URL
               value: "http://users-service:4001"
 ---
 apiVersion: v1
@@ -31,6 +31,6 @@ spec:
   selector:
     app: web
   ports:
-    - port: 4000
-      targetPort: 4000
+    - port: 80
+      targetPort: 80
       nodePort: 30080
